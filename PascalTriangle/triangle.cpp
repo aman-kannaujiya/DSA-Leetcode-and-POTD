@@ -12,7 +12,7 @@ public:
     }
 };
 
-#Explanation
+/*
 We aim to generate Pascal’s Triangle up to a given number of rows, where each row is a list of integers representing the coefficients in the binomial expansion.
 
 We create a 2D vector (a list of lists) called the result, with a size equal to the number of rows. Each row will eventually contain the appropriate number of elements.
@@ -32,5 +32,5 @@ The outer loop ensures that all rows are processed, and the inner loop only runs
 
 The approach is efficient as it builds the triangle incrementally using only addition and previously stored values, without recomputation.
 
-Finally, the filled 2D list representing Pascal's Triangle is returned, where each row contains the correct binomial coefficients.
+Finally, the filled 2D list representing Pascal's Triangle is returned, where each row contains the correct binomial coefficients. */
 
