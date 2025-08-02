@@ -37,7 +37,6 @@
 
 
 /*
-#Explanation step by step
 We use an unordered map to efficiently track the frequency difference of elements between the two baskets. Unordered maps provide fast average time complexity for insertions and lookups, and we don’t care about the order of elements, so this choice is optimal.
 
 We keep a variable to store the minimum element across both baskets, because it plays an important role later in minimizing the swap cost. This is based on the idea that sometimes using the smallest value to perform two indirect swaps is cheaper than a direct swap between large values.
