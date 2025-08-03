@@ -57,63 +57,80 @@ You can move at most k = 2 steps and cannot reach any position with fruits.
 
 // EXPLANATION
 /*Step-by-Step Pointwise Explanation
-1. Understand the Problem
-You are on a number line at position startPos, and there are fruits at various sorted positions.
+ 1. Understand the Problem
+You're placed on a number line at position startPos.
 
-You can move left or right, up to K total steps.
+There are fruits available at certain sorted positions, each with a quantity.
 
-At every position you reach, you collect all fruits present.
+You can take up to k total steps, moving left or right.
 
-Goal: Maximize total fruits collected.
+Wherever you land, you collect all fruits at that location.
 
-2. Preprocessing
-Store all fruit positions in a new vector positions.
+Goal: Maximize the total number of fruits collected within the step limit.
 
-Compute a prefix sum array prefix, where prefix[i] is the total fruits from the start up to the ith fruit.
+✅ 2. Preprocessing the Data
+Extract all fruit positions into a separate array.
 
-3. Main Logic - Try All Possible Turns
-There are only two optimal paths:
+Compute a prefix sum array, where each entry at index i tells you the total fruits from index 0 to i.
 
-Go some distance to the left, then all the way right.
+This helps in quickly computing the total number of fruits in any range of positions using subtraction.
 
-Go some distance to the right, then all the way left.
+✅ 3. Optimal Movement Strategy
+Only two types of movement patterns are optimal:
 
-Never U-turn twice: If you turn left→right→left, it wastes steps.
+Move left first, then right.
 
-So, only try the above two cases for all possible values of d (distance).
+Move right first, then left.
 
-4. Enumerate All Valid d
-Loop through all possible d from 0 to K/2.
+Key insight:
+🚫 Avoid more than one U-turn (e.g., left → right → left), as it wastes steps unnecessarily.
 
-Case 1: Go d left, then right with remaining steps
-Final interval: [startPos-d, startPos + (k - 2d)]
+So we only need to consider one U-turn maximum, and for every possible value of d (distance turned in one direction), we explore these two patterns.
 
-Use binary search (lower_bound and upper_bound) to find the leftmost and rightmost indices covering this interval in the positions array.
+✅ 4. Loop Over All Valid Turn Distances (d)
+Try every possible d from 0 to k / 2.
 
-Case 2: Go d right, then left with remaining steps
-Final interval: [startPos - (k-2d), startPos + d]
+Why up to k/2?
+Because moving d units out and returning takes 2d steps — the rest can be used in the opposite direction.
 
-Similarly, find left and right indices.
+➤ Case 1: Go d steps left, then go right with remaining steps:
+The total covered interval will be from startPos - d to startPos + (k - 2d).
 
-5. Interval Summing
-For current interval [left, right], use the prefix sum to compute fruits collected:
+➤ Case 2: Go d steps right, then go left with remaining steps:
+The interval will be from startPos - (k - 2d) to startPos + d.
 
-total = prefix[right] - (left > 0 ? prefix[left-1] : 0)
+✅ 5. Get the Valid Interval of Fruit Positions
+For each case, determine which fruit positions fall inside the current interval.
 
-Update maximum answer so far.
+Since fruit positions are sorted, use binary search to quickly find:
 
-6. Return the Best Answer
-After checking both movements for every valid d value, return the maximum collected fruits.
+The first fruit position that lies within or after the left end of the interval.
 
-Key Intuition
-Use prefix sums for fast summing of fruits in any interval.
+The last fruit position that lies within or before the right end of the interval.
 
-Use binary search (lower_bound, upper_bound) as fruit positions are sorted.
+✅ 6. Use Prefix Sum to Calculate Fruits in Interval
+Using the indices found via binary search, compute total fruits in that interval in constant time:
 
-Only two important cases, as returning in the same direction is inefficient.
+Subtract prefix sums to get total fruits between two indices.
 
-Time and Space Complexity
-Time: O(K log N) because for each possible d you do log n binary searches.
+Keep updating the maximum total fruits collected so far.
 
-Space: O(N) for prefix arrays. */
+✅ 7. Return the Final Answer
+After checking both movement patterns for every valid d, return the highest amount of fruits collected.
+
+💡 Key Concepts Used
+Prefix Sum: Fast summing of fruit counts over ranges.
+
+Binary Search (lower_bound, upper_bound): Quickly locate relevant indices in sorted positions.
+
+Greedy-like Optimization: Only try the two efficient movement patterns, avoiding unnecessary paths.
+
+⏱️ Time & Space Complexity
+Time Complexity:
+
+O(K log N) — You try up to K/2 values of d, and for each you perform log N binary search.
+
+Space Complexity:
+
+O(N) — for storing positions and prefix sums. */
 
