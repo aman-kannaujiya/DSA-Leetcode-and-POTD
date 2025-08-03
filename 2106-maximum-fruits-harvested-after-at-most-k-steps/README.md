@@ -52,3 +52,68 @@ You can move at most k = 2 steps and cannot reach any position with fruits.
 	<li><code>1 &lt;= amount<sub>i</sub> &lt;= 10<sup>4</sup></code></li>
 	<li><code>0 &lt;= k &lt;= 2 * 10<sup>5</sup></code></li>
 </ul>
+
+
+
+// EXPLANATION
+/*Step-by-Step Pointwise Explanation
+1. Understand the Problem
+You are on a number line at position startPos, and there are fruits at various sorted positions.
+
+You can move left or right, up to K total steps.
+
+At every position you reach, you collect all fruits present.
+
+Goal: Maximize total fruits collected.
+
+2. Preprocessing
+Store all fruit positions in a new vector positions.
+
+Compute a prefix sum array prefix, where prefix[i] is the total fruits from the start up to the ith fruit.
+
+3. Main Logic - Try All Possible Turns
+There are only two optimal paths:
+
+Go some distance to the left, then all the way right.
+
+Go some distance to the right, then all the way left.
+
+Never U-turn twice: If you turn left→right→left, it wastes steps.
+
+So, only try the above two cases for all possible values of d (distance).
+
+4. Enumerate All Valid d
+Loop through all possible d from 0 to K/2.
+
+Case 1: Go d left, then right with remaining steps
+Final interval: [startPos-d, startPos + (k - 2d)]
+
+Use binary search (lower_bound and upper_bound) to find the leftmost and rightmost indices covering this interval in the positions array.
+
+Case 2: Go d right, then left with remaining steps
+Final interval: [startPos - (k-2d), startPos + d]
+
+Similarly, find left and right indices.
+
+5. Interval Summing
+For current interval [left, right], use the prefix sum to compute fruits collected:
+
+total = prefix[right] - (left > 0 ? prefix[left-1] : 0)
+
+Update maximum answer so far.
+
+6. Return the Best Answer
+After checking both movements for every valid d value, return the maximum collected fruits.
+
+Key Intuition
+Use prefix sums for fast summing of fruits in any interval.
+
+Use binary search (lower_bound, upper_bound) as fruit positions are sorted.
+
+Only two important cases, as returning in the same direction is inefficient.
+
+Time and Space Complexity
+Time: O(K log N) because for each possible d you do log n binary searches.
+
+Space: O(N) for prefix arrays. */
+
